@@ -149,3 +149,67 @@ int result = Calculator.add(10,20);
 public class 클래스이름{}
 //소스파일에 두개이상 클래스 성성가능, 바이트 코드 파일(.class) 각각생성
 
+//new연산자 사용 클래스로부터 객체 생성
+new 클래스();
+클래스 변수 ;
+변수 = new 클래스();
+클래스 변수 = new 클래스();
+//변수가 객체 참조
+Student s1 = new Student();
+
+//클래스 구성 멤버
+public class ClassName{
+    int fieldname;          /*필드-객체의 데이터 저장되는 곳, 객체와 함께 존재*/
+    ClassName(){...}        /*생성자-객체 생성시 초기화 역할, 필드 초기화 메소드 호출해서 객체 사용준비,리턴타입X*/
+    void methodName(){...}  /*메소드-객체의 동작을 실행하는 실행블록,변수-메소드내에서만 사용 종료시 소멸,결과값 외부 리턴*/
+}
+
+//필드
+//클래스 내부: 생성자,메소드에서 사용경우 필드 이름으로 읽고 변경
+//클래스 외부: 클래스로 부터 객체 생성한뒤 필드 사용
+person클래스
+viod metod(){
+    Car mycar = new Car();
+    mycar.speed = 60;   /*객체 생성 후 필드값 변경*/
+}
+Car클래스
+int speed;
+Car(){
+    speed = 0;
+}
+void method(...){
+    speed = 10;
+}
+
+//생성자
+//생성자를 실행하지 않고서는 클래스로 부터 객체를 만들 수 없음
+//소스파일에서 생략하면 기본 생서자 바이트코드 파일에서 자동 추가
+클래스(매개변수선언,...){
+    객체의 최기화 코드
+}
+//매개변수-new연산자로 생성자를 호출할 때 외부의 값을 생성자 내부로 전달하는 역할
+//객체 생성
+Car myCar = new Car("그","검",300);
+public class Car{
+    Car(String model,String color,int maxSpeed){...}
+}
+//필드 초기화
+/*기본초기값 말고 설정 방법 
+    1.필드 선언 시 초기값주기(동일한 클래스로부터 생성하는 객체는 모두 같은 값을 가짐,생성 후 초기값 변경 가능) 
+    2.생성자에서 초기값주기(외부에서 주는 다양한 값으로 변경할때) */
+public class Korean{
+    String name ;
+    String nation = "Korea";
+    String ssn;
+    public Korean(String n,String s){
+        name = n;
+        ssn = s;
+    } 
+}
+pubilc class KoreanE{
+    public static void main(String[] args) {
+        Korean k1 = new Korean("이주형","01001010");
+        System.out.println(k1.nation+","+k1.name);
+    }
+}
+//생성자 오버로딩
