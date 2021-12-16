@@ -213,3 +213,57 @@ pubilc class KoreanE{
     }
 }
 //생성자 오버로딩
+//외부의 다양한 데이터 이용하기 위한 생성자 다양화
+//타입,개수,순서 다르게
+public class Car{
+    Car(){...}
+    Car(String model){...}
+    Car(String model, String color){...}
+    Car(String model, String color, int Number){...}
+}
+//생성자에서 다른 생성자 호출 : this() ; 생성자 오버로딩 많아질 경우 중복된 코드 발생↑
+public class Car{
+    String model;
+    String color;
+    int Number;
+    Car(){...}
+    Car(String model){
+        this(model,"은색",250);
+    }
+    Car(String model, String color){
+        this(model,color,250);
+    }
+    Car(String model, String color, int Number){
+        this.model=model;
+        this.color=color;
+        this.Number=Number;
+    }
+}
+
+//메소드
+리턴타입 메소드이름 ([매개변수선언,...]){
+    실행할 코드 작성
+}
+//리턴값X인 메소드: void 기술
+//리턴값O인 메소드: 타입에 따라
+void powerOn(){...}
+double divide(int x,int y){...}
+//호출방법
+poweron();
+double result = divide(10,20);
+//매개변수 선언
+int plus(int x,int y){
+    int result = x+y;
+    return result;
+}
+//매개변수 개수 모를 경우
+//매개변수 배열타입
+int sum1 (int[] values){} /*배열의 항목 수 호출할때 결정*/
+int [] values = {1,2,3};
+int result = sum1(values);
+int result = sum1(new int[]{1,2,3,4,5});
+//메소드 호출시 자동 배열생성
+int sum2(int ... values){}
+int reslut = sum2(1,2,3);
+int reslut = sum2(1,2,3,4,5);
+
