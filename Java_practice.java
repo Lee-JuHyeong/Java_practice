@@ -267,3 +267,26 @@ int sum2(int ... values){}
 int reslut = sum2(1,2,3);
 int reslut = sum2(1,2,3,4,5);
 
+//리턴 return 문
+//리턴문 사용해서 리턴값지정해야함, return문 실행되면 메소드 즉시 종료
+return 리턴값;
+//리턴값없는 메소드 : return문 강제종료 역할로 사용
+
+//메소드 호출
+//객체 내부에서 호출
+public class ClassName{
+    void method1(String p1,int p2){}
+    void method2(){
+        method1("홍",10);
+    }
+    void method3(){
+        int reslut1 = method1("김",20);
+    }
+}
+//객체 외부에서 호출
+클래스 참조변수 = new 클래스(매개값,...);
+Car myCar = new Car();
+myCar.run();
+//메소드 오버로딩 : 매개값 타입을 보고 메소드 선택
+int plus(int x,int y){}
+double plus(double x,double y){}
