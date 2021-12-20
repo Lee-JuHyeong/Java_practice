@@ -290,3 +290,62 @@ myCar.run();
 //메소드 오버로딩 : 매개값 타입을 보고 메소드 선택
 int plus(int x,int y){}
 double plus(double x,double y){}
+
+//인스턴스 멤버 - 객체(인스턴스)를 생성한 후 사용할 수 있는 필드와 메소드(인스턴스 필드, 인스턴스 메소드)
+public class Car{
+    int gas; /*인스턴스 필드*/
+    viod setSpeed(int speed){...} /*ㅡ인스턴스 메소드*/
+}
+//외부에서 사용위해 객체(인스턴스) 생성 후 참조변수(myCar)ㄹ 접근
+Car myCar = new Car();
+myCar.gas = 10;
+myCar.setSpeed(20);
+
+//this
+/*객체 내부에서 인스턴스 멤버에 잡근하기 위해 this 사용, 객체는 자신을 this라고 함
+    this.model(자신이 가지고 있는 model필드라는 뜻)*/
+Car(String model){
+    this.model = model;
+}
+//매개변수model의 값을 필드model에 저장
+
+//정적멤버 - 클래스에 고정된 멤버로서 객체를 생성하지 않고 사용할 수 있는 필드와 메소드(정적 메소드,정적 필드)
+//정적멤버 선언 - static 키워드 추가적으로 붙여야함
+public class 클래스{
+    static 타입 필드 [=초기값];
+    static 리턴 타입 메소드(매개변수선언,...){...}
+}
+//인스턴스 정적 판단 기준
+//1. 객체마다 가지고 있어야 하 데이터라면 인스턴스 필드
+//2. 공용 데이터라면 정적 필드 ex) 원둘레 파이(3.14)
+public class Calculator{
+    static double pi = 3.14;
+    static int plus(int x, int y){...}
+}
+double result1 = 10*10*Calculator.pi;
+int result2 = Calculator.plus(10,20);
+//객체 참조변수로도 접근 가능
+Calculator myCalculator = new Calculator();
+double result1 = myCalculator.plus(10,20);
+int result2 = 10*10*myCalculator.pi;
+//정적 메소드 안에 인스턴스 필드,메소드 사용 불가능
+public class ClassName{
+    int field1;
+    void method1() {...}
+    static int field2;
+    static void method2() {...}
+    static void method3() {
+        this.field1 = 10;   //컴파일 에러
+        this.method1();     //컴파일 에러
+        ClassName obj = new ClassName(); //참조변수로 내부에 인스턴스 접근 가능
+        obj.field1 = 10;
+        obj.method2();
+
+        field2 = 10;
+        method2();
+    }
+}
+//main()메소드도 정적 메소드이므로 객체 생성없이 인스턴스 사용 불가
+
+/*싱글톤 - 전체 플금램에서 단 하나의 객체만 만들도록 보장해야하는 경우 있음
+    클래스 외부에서 new연산자로 생성자 호출 없도록 막아야함, private접근 제한자 붙여주어야함*/
