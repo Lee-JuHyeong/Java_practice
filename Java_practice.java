@@ -141,6 +141,7 @@ int second = now.get(Calendar.SECOND);
 //객체(object): 물리적 존재,추상적 생각할수있는것 중 자신의 속성가지고 식별가능한것 속성(필드),동작(메소드) 구성
 //사람 (이름 나이)속성, (달린다,멈춘다)동작
 //메소드 호출: 객체가 다른 객체의 기능을 이용하는것
+//모든 객체는 생성자를 호출해야만 생성됨
 리턴값 = ~객체.메소드[객체,필드,메소드 접근시](매개값1,매개값2);[메소드 실행 위한 데이터]
 int result = Calculator.add(10,20);
 
@@ -368,6 +369,10 @@ final 타입 필드 [= 초기값];
 //final 상수 - 불변의 값(원주율 파이,지구 둘레,무게)이런 값을 저장하는 필드를 자바에서 상수라 불림
 static final 타입 변수 = 초기값;
 //상수 이름은 모두 대문자로 EARTH_AREA
+//final 클래스 - 상속할 수 없는 클래스 final클래스는 부모클래스가 될 수 없음 자식 클래스도 만들수 없음
+public final class 클래스{...}
+//final 메소드 - 재정의할 수 없는 메소드
+public final 리턴타입 메소드(매개변수,...){...}
 
 //package - 클래스를 체계적으로 관리하기 위해
 상위패키지.하위패키지.클래스
@@ -435,3 +440,164 @@ public void setFieldName(타입 fieldName){ //setter
 class 자식클래스 extends 부모클래스1 {...}
 class sprotsCar extends Car{...}
 //부모클래스의 private 접근제한 갖는 필드,메소드 상속 대상 제외
+public class CellPhone{
+    String model;
+    String color;
+}
+public class DmbCellPhone extends CellPhone {
+    int channel;
+    DmbCellPhone(String model, String color, int channel){
+        this.model = model; //CellPhone 클래스로부터 상속받은 필드
+        this.color = color; //CellPhone 클래스로부터 상속받은 필드
+        this.channel = channel;
+    }
+}
+
+/*부모 생성자 호출 - 부모객체가 먼저 생성되고 자식 객체가 생성됩니다.
+    모든 객체는 생성자를 호출해야만 생성됨, 생성자를 명시적으로 선언하지않으면 
+    기본 생성자 super();(부모기본 생성자를 호출) 생성됨
+    자식 생성자에서 첫줄에 부모생성자 호출이 이루어져야함*/
+super(매개값,...); //부모 생성자중 매개값 타입 일치하는 부모 생성자 호출
+public class People{
+    public People(String name, String ssn){
+        this.name = name;
+        this.ssn = ssn;
+    }
+}
+public class myPeople{
+    public People(String name, String ssn, int studentNo){
+        super(name,ssn);
+        this.studentNo = studentNo;
+    }
+}
+
+//메소드 재정의 - 상속된 일부 메소드는 자식 클래스에서 다시 수정해서 사용해야함, 이런 경우위해 메소드 재정의(오버라이딩)기능 사용
+/*방법
+    1. 부모의 메소드와 동이한 시그니쳐(리턴 타입,메소드 이름,매개 변수 목록)가져야함
+    2. 접근 제한을 더 강하게 재정의 못함
+    3. 새로운 예외를 throws할 수 없음
+    @Override
+메소드 재정의되면 부모객체의 메소드는 숨겨지기 때문에 자식 객체에서 메소드 호출하면 재정의된 자식 메소드 호출됨*/
+class Parent {
+    void method1(){...}
+    void method2(){...}
+}
+class Child extends Parent {
+    void method2(){...} //재정의
+    void method3(){...}
+}
+class ChildE {
+    public static void main(String[] args){
+        Child.method1();
+        Child.method2(); //재정의된 메소드 호출
+        Child.method3();
+    }
+}
+//부모 메소드 호출 - 자식 클래스에서 부모 클래스의 메소드 재정의하게 되면 자식 메소드만 사용됨
+//super 키워드 사용
+super.부모메소드();
+
+//다형성 - 사용 방법은 동일하지만 다양한 객체를 이용해 다양한 실행결과가 나오도록 하는 성질(타이어 어느것 쓰냐 서능다름)
+//다형성구현 - 메소드 재정의 + 타입변환
+//자동타입변환 - 프로그램 실행도중 자동적으로 타입변환이 일어나는 것
+//클래스의 변환은 상속관계있는 클래스사이 일어남
+부모타입 변수 = 자식타입; //자동타입변환
+Cat cat =new Cat();
+Animal animal = cat; //1
+Animal animal = new Cat(); //2
+//동일 한 Cat객체를 참조, 타입이 Animal이라 부모객체(Animal) 참조가 아닌 Cat객체 참조
+//부모가 아니더라도 상속계층에서 상위 타입이라면 자동타입변환 가능
+/*부모타입으로 자동 변환이후 부모클래스에 선언된 필드와 메소드만 접근 가능
+    변수가 자식객체를 참조하지만 접근 가능한 멤버는 부모클래스 멤버로 한정
+    예외로 메소드가 자식클래스에서 재정의되었다면 자식클래스의 메소드가 대신 호출 됨*/
+class Parent {
+    void method1(){...}
+    void method2(){...}
+}
+class Child extends Parent{
+    void method2(){...} //재정의
+    void method3(){...}
+}
+class ChildE {
+    public static void main(String[] args){
+        Child child = new Child();
+        Parent parent = child;
+        parent.method1();
+        parent.method2();
+        parent.method3(); //호출불가능
+    }
+}
+//자동 타입변환은 다형성을 구현하기위해 사용
+/*자식 클래스는 부모 메소드를 재정의해서 메소드의 실행 내용을 변경함으로써 더 우수한 시행결과가 나오게 할 수 있음*/
+class Car {
+    Tire frontLeftTire = new Tire();
+    Tire frontRightTire = new Tire();
+    Tire backLeftTire = new Tire();
+    Tire backRightTire = new Tire();
+    void run(){...}
+}
+Car myCar = new Car();
+myCar.frontRightTire = new HankookTire(); //교체
+myCar.backLeftTire = new KumhoTire();     //교체
+myCar.run();
+//frontRightTire,backLeftTire에 Tire객체의 자식 객체저장되어도 됨(Tire의 필드 메소드 들고있기때문)
+//Car의 run() 수정하지않고 다양한 값을 얻을 수있음
+
+//매개변수의 다형성 - 매개값을 다양화하기 위해 매개변수에 자식 객체를 지정할 수도 있음
+class Driver {
+    void drive(Vehicle vehicle){
+        vehicle.run();
+    }
+}
+Driver diriver = new Driver();
+Vehicle vehicle = new vehicle();
+driver.driver(vehicle);
+//Vehicle의 자식클래스Bus 객체를 drive()메소드의 매개값으로 주면 자동타입변환 일어남
+Driver diriver = new Driver();
+Bus bus = new Bus();
+driver.driver(bus); // Vehicle vehicle = bus; 자동타입변환 발생
+//매개변수의 타입이 클래스일 경우 - 해당 클래스, 자식 객체 까지도 사용 가능(매개값으로 어떤 자식 객체가 제공되냐 따라 실행결과 다양해짐)
+public class Vehicle {
+    public void run(){
+        System.out.println("차량");
+    }
+}
+public class Driver {
+    public void drive(Vehicle vehicle){
+        vehicle.run();
+    }
+}
+public class Bus extends Vehicle {
+    @Override
+    public void run(){
+        System.out.println("버스");
+    }
+}
+public class Taxi extends Vehicle {
+    @Override
+    public void run(){
+        System.out.println("택시");
+    }
+}
+public class DriverE {
+    public static void main(String[] args){
+        Driver driver = new Dricer();
+        Bus bus = new Bus();
+        Taxi taxi = new Taxi();
+        driver.drive(bus); //자동타입변환 Vehicle vehicle = bus;
+        driver.drive(taxi); //자동타입변환 Vehicle vehicle = taxi;
+        }
+}
+
+//강제타입변환 - 부모타입을 자식타입으로 변환하는 것
+//자식 타입이 부모 타입으로 자동 타입 변환한 후 다시 자식 타입으로 변환할때 강제 타입 변환 사용 가능
+Parent parent = new Child();
+Child child = (Child) parent;
+//자식에 선언된 필드와 메소드를 꼭 사용해야한다면 강제 타입 변환을 해서 사용해야함
+//객체타입확인 - instanceof 연산자 사용
+boolean result = 좌항(객체) instanceof 우항(타입)
+public void method(Parent parent){
+    if(parent instanceof Child){
+        Child child = (Child) parent;
+    }
+}
