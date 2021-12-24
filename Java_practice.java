@@ -1,3 +1,4 @@
+import java.rmi.Remote;
 import java.util.Calendar;
 
 //class 선언
@@ -478,13 +479,17 @@ public class myPeople{
     3. 새로운 예외를 throws할 수 없음
     @Override
 메소드 재정의되면 부모객체의 메소드는 숨겨지기 때문에 자식 객체에서 메소드 호출하면 재정의된 자식 메소드 호출됨*/
+//부모 메소드 호출 - 자식 클래스에서 부모 클래스의 메소드 재정의하게 되면 자식 메소드만 사용됨, super 키워드 사용
+super.부모메소드();
 class Parent {
     void method1(){...}
     void method2(){...}
 }
 class Child extends Parent {
     void method2(){...} //재정의
-    void method3(){...}
+    void method3(){
+        super.method2(); //부모 메소드 호출
+    }
 }
 class ChildE {
     public static void main(String[] args){
@@ -493,9 +498,6 @@ class ChildE {
         Child.method3();
     }
 }
-//부모 메소드 호출 - 자식 클래스에서 부모 클래스의 메소드 재정의하게 되면 자식 메소드만 사용됨
-//super 키워드 사용
-super.부모메소드();
 
 //다형성 - 사용 방법은 동일하지만 다양한 객체를 이용해 다양한 실행결과가 나오도록 하는 성질(타이어 어느것 쓰냐 서능다름)
 //다형성구현 - 메소드 재정의 + 타입변환
@@ -601,3 +603,112 @@ public void method(Parent parent){
         Child child = (Child) parent;
     }
 }
+
+/*추상 클래스 - 추상(공통되는 특성), 실체 클래스에서(bird,insect,fish) 공통되는 필드와 메소드 따로 선언한 클래스(animal)
+    실체클래스가 공통적으로 가져야 할 필드,메소드 정의해놓은 추상적 클래스(필드,메소드 통일 목적)*/
+//실체 클라스는 추상클래스 상속함
+//용도 - 1.공통된 필드와 메소드의 이름을 통일할 목적 2.실체클래스 작성 시간 절약
+/*추상클래스 선언 - abstract 키워드 붙임(abstract붙이면 new연산자 이용해서 객체 못만듬,
+    상속을 통해 자식 클래스만 만들수있음, 자식 객체가 생성될때 super(...)호출해서 추상클래스 객체 생성하므로 생성자 반드시 있어야함)*/
+public abstract class 클래스 {
+    //필드
+    //생성자
+    //메소드
+}
+public abstract class Phone{
+    public String owner;
+    public Phone(String owner){
+        this.owner = owner;
+    }
+    public void turnOn(){
+        System.out.println("폰 킴");
+    }
+    public void turnOff(){
+        System.out.println("폰 끔");
+    }
+    
+}
+publi class SmartPhone extends Phone {
+    public SmartPhone(String owner){
+        super(owner); //Phone 생성자 호출
+    }
+    public void internetSearch() {
+        System.out.println("인터넷 검색");
+    }
+}
+public class PhoneE{
+    public static void main(String[] args){
+        //Phone phone = new Phone(); 추상클래스 new연산자 호출 객체 생성 X
+        SmartPhone smartPhone = new SmartPhone("이주형");
+        smartPhone.turnOn(); //Smartphone으로 객체를 생성해 Phone의 메소드 사용 가능
+        smartPhone.turnOff();
+        smartPhone.internetSearch();
+    }
+}
+
+/*추상 메소드, 재정의 - 메소드의 선언만 통일하고 실행 내용 달라야하는 경우(돌물의 울음소리 각각 다름), 추상클래스는 추상 메소드 선언
+    자식 메소드는 반드시 추상메소드를 재정의해서 사용해야함*/
+public abstract class Animal {
+    public abstract void sound(매개변수,...);
+}
+public class Dog extends Animal {
+    @Override
+    public void sound() {
+        System.out.println("멍");
+    }
+}
+
+/*인터페이스 - 개발 코드와 객체가 서로 통신하는 접점 역할, 개발코드는 인터페이스 메소드호출 인터페이스는 객체의 메소드호출
+    개발코드를 수정하지 않고 사용하는 객체를 변경하여 다양한 실행내용과 리턴값을 얻기 위해*/
+//인터페이스 객체사용방법 정의이므로 실행시 데이터저장가능한 인스턴스,정적필드 선언 못함
+//인터페이스 선언 - ~.java 형태의 소스파일 작성 컴파일(javac)통해 ~.class컴파일, class대신 interface 키워드 사용
+[public] interface 인터페이스이름 {
+    타입 상수이름 = 값; // 상수 필드
+    타입 메소드이름(매개변수,...); //추상 메소드
+}
+//상수필드 - 상수(인터페이스에 고정된 값 실행시 데이터 변경X), 인터페이스에 선언된 필드는 모두 public static final의 특성 가짐(생략해도 자동추가)
+[public static final] 타입 상수이름 = 값;
+/*추상메소드 선언 - 인터페이스를 통해 호출된 메소드는 최종적으로 객체에서 실행(실행 블록 필요없는 추상만 선언)
+    public abstract의 특성 가짐(생략해도 자동 추가)*/
+[public abstract] 리턴타입 메소드이름(매개변수,...);
+public interface RemoteControl {
+    int MAX_VOLUME = 10;
+    int MIN_VOLUME = 0;
+    public void turnOn();
+    public void turnOff();
+    public void setVolume(int volume);
+}
+/*인터페이스 구현 - 객체는 인터페이스에서 정의된 추상 메소드와 동일한 메소드 이름,매개 타입, 리턴 타입을 가진 실체 메소드를 가지고 있어야함
+    이러한 객체를 구현(implements) 객체라함, 구현 객체를 생성하는 클래스는 구현 클래스라고 함*/
+//구현 클래스 - implements 키워드 추가하고 인터페이스 이름 명시, 인터페이스의 선언된 추상메소드 실체메소드를 선언
+public class 구현클래스이름 implements 인터페이스이름 { 
+    //인터페이스에 선언된 추상메소드의 실체메소드 선언
+}
+public class TV implements RemoteControl {
+    private int volume;
+    public void turnOn() { //turnOn() 추상메소드의 실체 메소드
+        System.out.println("tv on");
+    }
+    public void turnOff() { //turnOff() 추상메소드의 실체 메소드
+        System.out.println("tv off");
+    }
+    public void setVolume(int volume){} //setVolume() 추상메소드의 실체 메소드
+}
+//인터페이스로 구현 객체를 사용하려면 인터페이스 변수 선언하고 구현 객체 대입해 사용해야함
+public class RemoteControlE {
+    public static void main(String[] args){
+        RemoteControl rc;
+        rc = new TV();
+        rc = new Audio();
+    }
+}
+//다중 인터페이스 구현 클래스 - 객체는 다수의 인터페이스를 사용 가능, 구현 클래스에 모두 구현
+public class 구현클래스이름 implements 인터페이스A, 인터페이스B {
+    //인터페이스A에 선언된 추상메소드의 실체메소드 선언
+    //인터페이스B에 선언된 추상메소드의 실체메소드 선언
+}
+public interface Searchable {
+    void search(String url); //매개값으로 인터넷 웹사이트 주소(URL)받음
+}
+public class TV implements RemoteControl, Searchable {...}
+//인터페이스 사용 - 인터페이스로 구현객체 사용 방법
