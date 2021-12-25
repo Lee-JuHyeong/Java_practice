@@ -686,10 +686,10 @@ public class 구현클래스이름 implements 인터페이스이름 {
 }
 public class TV implements RemoteControl {
     private int volume;
-    public void turnOn() { //turnOn() 추상메소드의 실체 메소드
+    public void turnOn() { //turnOn() 추상메소드의 실체 메소드 재정의
         System.out.println("tv on");
     }
-    public void turnOff() { //turnOff() 추상메소드의 실체 메소드
+    public void turnOff() { //turnOff() 추상메소드의 실체 메소드 재정의
         System.out.println("tv off");
     }
     public void setVolume(int volume){} //setVolume() 추상메소드의 실체 메소드
@@ -711,4 +711,29 @@ public interface Searchable {
     void search(String url); //매개값으로 인터넷 웹사이트 주소(URL)받음
 }
 public class TV implements RemoteControl, Searchable {...}
-//인터페이스 사용 - 인터페이스로 구현객체 사용 방법
+
+//인터페이스 다형성 - 구현 객체를 교체함으로써 프로그램 실행 결과 다양해짐
+//인터페이스 이용한다면 클래스a가 문제있음을 알고 클래스b로 교체한다면 한줄이면 교체가능
+I i =new A(); //수정
+I i =new B();
+i.method1(); //수정X
+i.method2(); //수정X
+interface I {
+    void method1();
+    void method2();
+}
+/*자동 타입 변환 - 구현 객체가 인터페이스 타입으로 변환되는 것은 
+    자동타입변환(프로그램 실행도중 타입변혼이 자동적으로 일어나는 것)에 해당
+    인터페이스 구현 클래스로 상속해서 자식 클래스 만들었다면 자동타입변환 가능*/
+//매개변수 다형성 - 메소드 호출의 매개값 다양화
+public class Driver {
+    public void drive(Vehicle vehicle){
+        vehicle.run();
+    }
+}
+public interface Vehicle {
+    public void run();
+}
+Driver driver = new Driver();
+Bus bus = new Bus();
+driver.drive(bus); //Vehicle vehicle = bus; [Bus의 drive실행]
