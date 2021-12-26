@@ -737,3 +737,94 @@ public interface Vehicle {
 Driver driver = new Driver();
 Bus bus = new Bus();
 driver.drive(bus); //Vehicle vehicle = bus; [Bus의 drive실행]
+
+/*중첩 클래스 - 클래스 내부에 선언한 클래스, 두 클래스의 멤버서로 쉽게 접근가능(코드 복잡성 줄이기 위해)
+    1. 멤버 클래스 - 클래스의 멤버로서 선언되는 중첩 클래스, A(바깥클래스)$B(멤버클래스).class
+        1-1. 인스턴스 멤버 클래스 - static 키워드 없이 중첩 선언된 클래스 (정적 필드,메소드 선언 불가능)*/
+        class A {
+            class B{
+                int field1;
+                void method1() {}
+            }
+        }
+        //A클래스 외부 - A클래스 외부에서 B객체 생성하려면 A객체 생성후 생성해야함
+        A a = new A();
+        A.B b = a.new B();
+        b.field1 = 3;
+        b.method1();
+        //A클래스 내부 - A클래스 내부의 생성자 및 인스턴스 메소드에서는 일반 클래스 처럼 B객체 생성 가능
+        class A {
+            class B{...}
+            void methodA() {
+                B b = new B();
+                b.field = 3;
+                b.method1();
+            }
+        }
+      //1-2. 정적 멤버 클래스 - static 키워드로 선언된 클래스, 모든 종류의 필드,메소드 선언 가능
+        class A {
+            static class C {
+                C() {}
+                int filed1;
+                static int field2;
+                static void method2() {}
+            }
+        }
+      //A클래스 외부에서 A객체 생성 없이 C객체 생성 가능
+        A.C c = new A.C();
+        c.field1 = 3; //인스턴스 필드 사용
+        c.method1(); //인스턴스 메소드 호출
+        A.C.field2 = 3;//정적 필드 사용
+        A.C.method2(); //정적 메소드 호출
+  /*2. 로컬 클래스 - 생성자, 메소드 내부에 선언되는 중첩 클래스(메소드 실행때만 사용, 종료시 사라짐), A(바깥클래스)$1B(로컬클래스).class
+            로컬 클래스 - 접근 제한자(public private static) 사용 불가, 정적 메소드,필드 사용 불가*/
+            void method(){
+                class D {
+                    D() {}
+                    int field1;
+                    void method1() {}
+                }
+                D d = new D();
+                d.field1 = 3;
+                d.method1();
+            }
+            // 주로 비동기 처리위해 스레드 객체를 만들 때 사용
+            void method(){
+                class DownloadThread extends Thread {...}
+                DownloadThread thread = new DownloadThread();
+                thread.start();
+            }
+/*중첩 클래스 접근 제한
+    1. 바깥 필드,메소드에서 사용 제한 - 바깥 정적필드, 정적 메소드에서 인스턴스 멤버 클래스 사용 못함
+    2. 멤버 클래스에서 사용 제한 - 인스턴스 멤버 클래스(모든 바깥 클래스의 필드,메소드 접근 가능), 정적 멤버 클래스(정적 바깥 클래스의 필드,메소드 접근가능)
+    3. 로컬 클래스에서 사용 제한 - 로컬 클래스의 객체는 메소드 종료되어도 존재할 수 있음, final특성을 가져야함
+    4. 중첩 클래스에서 바깥 클래스 참조 얻기 - this(중첩 클래스에서 사용하면 바깥 클래스아닌 중첩 클래스 참조함), 바깥 클래스 참조 경우 this앞에 이름 붙여줌(바깥클래스.this.필드)*/
+
+/*중첩 인터페이스 - 클래스 내부에 인터페이스 선언, 해당 클래스와 긴밀한 관계를 맺는 구현 클래스 만들기 위해
+    인스턴스 멤버 인터페이스 - 바깥 클래스 객체가 있어야 사용가능
+    정적 멤버 인터페이스 - 바깥 클래스만으로 바로 접근 가능 (정적 주로 사용, UI프로그래밍에서 이벤트 처리 목적으로 사용)*/
+public class Button {
+    OnclickListener listener ;
+    void setOnclickListener(OnclickListener listener){
+        this.listener = listener;
+    }
+    void touch(){
+        listener.onClick();
+    }
+    static interface OnclickListener {
+        void onClick();
+    }
+}
+public class CallListener implements Button.OnclickListener {
+    @Override
+    public void onClick(){
+        System.out.println("전화 검");
+    }
+}
+public class ButtonE {
+    public static void main(String[] args){
+        Button btn = new Button();
+        btn.setOnclickListener(new CallListener());
+        btn.touch();
+    }
+}
