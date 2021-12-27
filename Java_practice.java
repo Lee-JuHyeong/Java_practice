@@ -828,3 +828,137 @@ public class ButtonE {
         btn.touch();
     }
 }
+
+//익명 객체 - 이름이 없는 객체 조건(어떤 클래스를 상속or인터페이스를 구현해야만 함)
+[상속]
+부모클래스 변수 = new 부모클래스();
+[구현]
+인터페이스 변수 = new 인터페이스() {...};
+//부모클래스 변수 이름없는 자식 객체 참조, 인터페이스 변수 이름없는 구현 객체 참조
+//익명 자식 객체 생성
+부모클래스 [필드|변수] = new 부모클래스(매개값,...) {};
+/*'부모클래스(매개값,...) {}'는 부모클래스를 상속해서 {}와 같이 자식 클래스를 선언하라는 뜻
+    new 연산자는 선언된 자식 클래스를 객체로 생성하라는 뜻
+    '부모클래스(매개값,...)'은 부모 생성자 호출, {}내부에 필드,메소드 선언하거나 부모 클래스 메소드 재정의
+    생성자 선언은 못함(불가능)*/
+//필드 선언시 초기값 익명 자식 객체 생성해서 대입
+class A {
+    Parent field = new Parent(){ //A클래스의 필드 선언
+        int childField;
+        void childMethod() {}
+        @Override
+        void parentMethod(){} //Parent메소드 재정의
+    };
+}
+//메소드내에서 로컬 변수 선언시 초기값 익명 자식 객체 생성해서 대압
+class A {
+    void method() {
+        Parent localVar = new Parent(){ //로컬 변수 선언
+            int childField;
+            void childMethod(){}
+            @Override
+            void parentMethod() {} //parent메소드 재정의
+        };
+    }
+}
+//메소드 매개변수가 부모 타입일 경우 메소드 호출하는 코드에 익명 자식 객체 생성해 매개값 대입
+class A{
+    void method1(Parent parent){}
+    void method2(){
+        method1( //method1 호출
+            new Parent(){ //매개값으로 익명 자식 객체 대입
+                int childField;
+                void childMethod() {}
+                @Override
+                void parentMethod() {}
+        }
+        );
+    }
+}
+//새롭게 정의된 필드,메소드 내부에서만 사용 외부에서 접근 불가능,부모 타입에 선언된 것만 사용 가능
+class A{
+    Parent field = new Parent(){
+        int childField;
+        void childMethod(){}
+        @Override
+        void parentMethod(){
+            childField = 3;
+            childMethod();
+        }
+    };
+    void method(){
+        field.childField = 3; //X
+        field.childMethod(); //X
+        field.parentMethod(); //O 접근가능
+    }
+}
+//익명 구현 객체 생성
+//필드를 선언할 때 초기값으로 익명 구현 객체를 생성해서 대입
+class A{
+RemoteControl field = new RemoteControl(){ //클래스A의 필드 선언
+    @Override //RemoteControl 인터페이스의 추상 메소드의 실체 메소드
+    void turnOn(){}
+    };
+}
+//매소드 내에서 로컬 변수를 선언할때 초기값으로익명 구현 객체를 생성해서 대입
+void method() {
+    RemoteControl localVar = new RemoteControl() { //로컬 변수 선언
+        @Override //RemoteControl 인터페이스의 추상메소드의 실체 메소드
+        void turnOn(){}
+    };
+}
+//메소드의 매개 변수가 인터페이스 타입일 경우 익명 구현 객체를 생성해서 매개값으로 대입하는 경우
+class A{
+    void method1(RemoteControl rc) {}
+    void method2(){
+        mrthod1( //method1() 메소드 호출
+            new RemoteControl() { //method1()의 매개값으로 익명 구현 객체를 대입
+            @Override
+            void turnOn() {}
+            }
+        );
+    }
+}
+//윈도우,안드로이드 등 UI프로그램에서 버튼 클릭 이벤트처리 위한 익명 구현 객체 이용 방법
+public class Button {
+    OnClickListener listener; //인터페이스 타입 필드
+    void setOnclickListener(OnClickListener listener) { //매개변수 다형성
+        this.listener = listener;
+    }
+    void touch() {
+        listener.onClick(); //구현 객체의 onClick() 메소드 호출
+    }
+    static interface OnClickListener { //중첩 인터페이스
+        void onClick();
+    }
+}
+public class Window{
+    Button button1 = new Button();
+    Button button2 = new Button();
+    //필드 초기값으로 대입
+    Button.OnclickListener listener = new Button.OnClickListener(){ //필드값으로 익명 객체 타입
+        @Override
+        public void onClick() {
+            System.out.printf("전화 검");
+        }
+    };
+    Window(){
+        button1.setOnclickListener(listener); //매개값으로 필드 대입
+        button2.setOnclickListener( //매개값으로 익명 객체 대입
+            new Button.OnclickListener() {
+                @Override
+                public void onClick(){
+                    System.out.printf("메세지 보냄");
+                }
+            }
+        );
+    }
+}
+public class Main{
+    public static void main(String[] args){
+        Window w = new Window();
+        w.button1.touch(); //버튼 클릭
+        w.button2.touch(); //버튼 클릭
+    }
+}
+//익명 객체의 로컬 변수 사용 - 익명 스레드 객체 사용(익명 객체 계속 실행 상태로 존재 가능)
