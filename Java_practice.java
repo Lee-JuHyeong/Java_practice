@@ -962,3 +962,42 @@ public class Main{
     }
 }
 //익명 객체의 로컬 변수 사용 - 익명 스레드 객체 사용(익명 객체 계속 실행 상태로 존재 가능)
+
+/*예외 - 사용자의 잘못된 조작 또는 개발자의 잘못된 코딩으로 인해 발생하는 프로그램 오류, 예외처리를 통해 정상 실행 상태 유지되도록 가능
+    자바는 예외가 발생할 가능성 높은 코드를 컴파일할 때 예외 처리 유무 확인함, 예외 처리 코드 없다면 컴파일X
+    종류 - 1. 일반 예외(컴파일 체크 예외), 컴파일 과정에서 예외 처리 코드 검사 
+           2. 실행 예외(java.lang.RunTimeException) - 실행 시 예측할 수 없이 갑자기 발생하기 때문에 컴파일할 때 검사X
+    예외를 클래스로 관리, java.lang.Exception 클래스 상속 받음
+실행 예외 - 개발자의 경험에 의해서 예오 처리 코드를 작성해야함
+    1. NullPointerException - 가장 빈번하게 발생하는 실행 예외(java.lang.NullPointerException), 객체 참조가 없는 상태(null값을 갖는 참조 변수로 객체 접근 연산자인 .(도트)사용 했을때)
+        객체가 없는 상태에서 사용하려한 예외
+    2. ArrayIndexOutOfBoundsException - 배열의 인덱스 범위 초과할 경우 실행 예외(java.lang.ArrayIndexOutOfBoundsException), if를 이용해 실행 매개값 부족할 경우 조건문 이용해 알려줄수있음
+    3. NumberFormatException - 숫자로 변환될 수 없는 문자가 포함되어 예외
+        문자열을 숫자로 변환하는 방벙
+        1. 리턴(int) - Integer.parseInt(String s), 주어진 문자열을 정수로 변환해서 리턴
+        2. 리턴(double) - Double.parseDouble(String s), 주어진 문자열을 실수로 변환해서 리턴
+    4. CLassCastException - 타입 변환의 예외*/
+//예외 처리 코드 - try-catch-finally 블록
+try{
+    //예외 발생 가능 코드
+} catch(예외클래스 e){
+    예외 처리
+} finally {
+    항상 실행;
+}
+//try블록 코드가 예외 발생 없이 정상 실행되면 catch블록 실행X finally 코드 바로 실행(생략 가능)
+//다중 catch - try문에서 여러 예외 발생가능, 다중 catch블록으로 작성
+//catch 순서 - 발생하는 예외순서부터 처리해줘야함
+//예외 떠넘기기 - 경우에 따라서 메소드를 호출한 곳으로 throws 키워드 사용해 예외를 떠넘길 수도 있음
+리턴타입 메소드이름(매개변수,...) throws 예외클래스1, 예외클래스2, ... {}
+리턴타입 메소드이름(매개변수,...) throws Exception {} //Exception으로 모든 예외 떠넘길수 있음(반드시 try내에 호출되어야 함, catch 블록에 떠넘겨 받은 예외를 처리해야함)
+public void method1() {
+    try{
+        method2();
+    } catch(ClassNotFoundException e){ //호출한 곳에서 예외 처리
+        System.out.println("클래스 존재X");
+    }
+}
+public void method2() throws ClassNotFoundException {
+    Class class = Class.forName("java.lang.String2");
+}
