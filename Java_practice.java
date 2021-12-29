@@ -1001,3 +1001,80 @@ public void method1() {
 public void method2() throws ClassNotFoundException {
     Class class = Class.forName("java.lang.String2");
 }
+
+//API(P466)
+/*Object 클래스 - 암시적으로 java.lang.Object 클래스 상속함, 모든 클래스는 Object 클래스의 자식,자손 클래스임
+    객체 비교(equals() 메소드) - 두 객체가 논리적으로 동일한 객체면 true , 아니면 false, 논리적으로란 객체가 저장하고 있는 데이터가 동일함*/
+        boolean result obj1[기준객체].equals(obj2[비교객체]); //결과 동일
+        boolean result = (obj1 == obj2)                      //결과 동일
+//  equals() 재정의할 때에는 매개값이 기준 객체와 동일한 타입의 객체인지 먼저 확인(instanceof연산자로 타입 확인), 이후 필드값이 동일하면 true 리턴
+        public class Member{
+            public String id;
+            public Member(String id){
+                this.id = id;
+            }
+        @Override
+        public boolean equals(Object obj){
+            if(obj instanceof Member){ //매개값이 Member타입인지 확인
+                Member member = (Member) obj; //Member 타입으로 강제타입 변환
+                if(id.equals(Member.id)){ //id필드값 동일한지 검사
+                    return true; //동일하다면 true 리턴
+                }
+            }
+            return false; //매개값이 Member타입이 아니거나 id필드값이 다른 경우 false 리턴
+        }
+    }
+//객체 해시코드(hashCode() 메소드) - 객체를 식별하는 하나의 정수값, 객체의 메모리 번지를 이용해서 해시코드를 만들어 리턴(객체마다 다른 값을 가짐)
+//    논리적 동등 비교 시 hashCode()의 오버라이딩 필요, 컬렉션 프레임워크에서 HashSet,HashMap,Hashtable 같은 방법으로 두 객체 동등한지 비교
+
+
+
+//객체 문자 정보(toString() 메소드) - 객체의 문자 정보를 리턴(클래스이름@16진수해시코드)로 구성된 문자 정보 리턴
+//    재정의(오버라이딩)하여 간결하고 유익한 정보 리턴하도록 되어 있음
+public class SmartPhone{
+    private String company;
+    private String os;
+    public SmartPhone(String company, String os){
+        this.company = company;
+        this.os = os;
+    }
+    @Overtide
+    public String toString(){ //toString() 재정의
+        return company + "," + os;
+    }
+}
+public class SmartPhoneE{
+    public static void main(String[] args){
+        SmartPhone myPhone = new SmartPhone("구글", "안드로이드");
+        String strObj = myPhone.toString(); //재정의된 toString() 호출
+        System.out.println(strObj); 
+        System.out.println(myPhone); //재정의된 toString()을 호출하고 리턴값을 받아 출력
+    }
+}
+/*System 클래스 - JVM위에서 실행 됨, 클래스를 이용해 운영체제의 일부기능을 이용함, 모든 필드, 메소드는 정적임
+    프로그램종료(exit() 메소드) - 강제적으로 JVM종료 시킬떄 호출, int매개값 지정해야함, 일반적으로 0을 줌*/
+System.exit(0);
+//  현재 시각 읽기(currentTimeMillis(), nanoTime() 메소드) - 컴퓨터의 시계로 부터 현재시간을 읽어서 long값을 리턴함
+long time = System.currentTimeMillis();
+long time = System.nanoTime();
+//      리턴값은 주로 프로그램 실행 소요 시간 측정에 사용(시작 시간 읽고, 끝날 때 시각 읽어서 차이 구하면 소요시간 나옴)
+/*Class 클래스 - 클래스와 인터페이스의 메타 데이터(클래스의 이름,생성자 정보,필드 정보,메소드 정보)를 Class클래스로 관리
+    Class 객체얻기(getClass(), forName()) - 세가지 방법중 하나 이용하면 됨*/
+Class clazz = 클래스이름.class; //1 클래스로부터 얻는 방법
+Class clazz = CLASS.forName("패키지...클래스이름"); //2 클래스로부터 얻는 방법
+Class clazz = 참조변수.getClass(); //3 객체로부터 얻는 방법
+public class ClassE{
+    public static void main(String[] args){
+        Class clazz = Car.class; //첫 번째 방법
+        Class clazz = Class.forName("sec01.exam08.Car"); //두 번째 방법
+        Car car = new ar(); //세 번째 방법
+        Class clazz = car.getClass(); //세 번째 방법
+        System.out.println(clazz.getName()); //sec01.exam08.Car
+        System.out.println(clazz.getSimpleName()); //Car
+        System.out.println(clazz.getPackage().getName()); //sec01.exam08
+    }
+}
+//클래스 경로 활용 리소스 절대 경로 얻기 - 해당 클래스의 파일 경로 정보를 가지고 있기 때문에 이 경로 활용해서 다른 리소스파일(이미지,XML,Property파일)의 경로를 얻을 수 있음
+//    클래스 기준으로 한 상대 경로를 이용해 얻어냄
+String photo1Path = clazz.getResource("photo1.jpg").getPath();
+String photo2Path = clazz.getResource("images/photo2.jpg").getPath();
