@@ -1026,7 +1026,7 @@ public void method2() throws ClassNotFoundException {
     }
 //객체 해시코드(hashCode() 메소드) - 객체를 식별하는 하나의 정수값, 객체의 메모리 번지를 이용해서 해시코드를 만들어 리턴(객체마다 다른 값을 가짐)
 //    논리적 동등 비교 시 hashCode()의 오버라이딩 필요, 컬렉션 프레임워크에서 HashSet,HashMap,Hashtable 같은 방법으로 두 객체 동등한지 비교
-
+//P475
 
 
 //객체 문자 정보(toString() 메소드) - 객체의 문자 정보를 리턴(클래스이름@16진수해시코드)로 구성된 문자 정보 리턴
@@ -1078,3 +1078,69 @@ public class ClassE{
 //    클래스 기준으로 한 상대 경로를 이용해 얻어냄
 String photo1Path = clazz.getResource("photo1.jpg").getPath();
 String photo2Path = clazz.getResource("images/photo2.jpg").getPath();
+/*Strng 클래스 - Stirng 생성자(자바의 문자열은 java.lang 패키지의 String 클래스의 인스턴스로 관리, 소스상에서 문자열 리터럴은 String개체로 자동 생성되지만,
+    String클래싀의 다양한 생성자를 이용해서 직접 객체 생성가능, 매개값의 타입에 따라 객체 생성하면 됨, 파일 내용일거나,네트워크 통해 받는 데이터 보통 byte[]배열이므로 문자열로 변환하기 위해 사용)*/
+        String str = new String(byte[] bytes); //배열 전체를 String 객체로 생성
+        String str = new String(byte[] bytes, String charsetName; //지정한 문자셋으로 디코딩
+        String str = new String(byte[] bytes, int offset, int length); //배열의 offset 인데스 위치부터 length만큼 String 객체로 생성
+        String str = new String(byte[] bytes, int offset, int length, String charsetName); //지정한 문자셋으로 디코딩
+//바이트 배열을 문자열로 변환
+public class ByteToStringE{
+    public static void main(String[] args){
+        byte[] bytes = {72,101,108,108,111,32,74,97,118,97};
+        String str1 = new String(bytes);
+        System.out.println(str1); //Hello Java 출력
+        String str2 = new Stirng(bytes,6,4); //6:74위치, 4:길이(개수)
+        System.out.println(str2); //Java 출력
+    }
+}
+//키보드로 부터 읽은 바이트 배열 문자열로 변환 방법 - Enter키 눌르면 캐리지리턴(\r)+라인피드(\n) 입력됨
+//  출력시 이길이 빼주면 됨
+String str2 = new Stirng(bytes,0,bytes-2);
+//String 메소드
+//문자 추출(charAt()) - 특정 위치의 문자를 리턴(매개값으로 주어진 인덱스의 문자를 리턴), 남녀구분 사용
+String str = "자바 프로그래밍";
+char char1 = str.charAt(3); //프 출력
+//문자열 비교(equals()) - 두 문자열을 비교(기본타입 비교시 ==연산자 사용, 문자열 비교시 ==사용하면 결과 맞지않음
+//    String str1 = new String("신");
+//    String str2 = "신";
+//    String str3 = "신";
+//    자바는 문자열 리터럴 같다면 같은 String 객체 참조하도록 되어 있음, str1다른객체 str2,3같은객체 참조함
+//    ==연산자는 각 변수에 저장된 번수를 비교하기 때문, equals()메소드 사용해 동등한지 비교)
+//바이트 배열로 변환(getBytes()) - byte[]로 리턴(문자열을 바이트 배열로 변환하는 경우 사용[네트워크로 문자열 전송,문자열 암호화])
+byte[] bytes = "문자열".getBytes(); //시스템의 기본 문자셋으로 인코딩된 바이트 배열을 리턴
+byte[] bytes = "문자열".getBytes(Charset charset); //특정 문자셋으로 인코딩된 바이트 배열 얻으려면 사용(EUC-KR,UTF-8)
+//P490, 인코딩
+//문자열 찾기(indexOf()) - 문자열 내에서 주어진 문자열의 위치를 리턴(매개값으로 주어진 문자열이 시작되는 인덱스 리턴)
+String str = "자바 프로그래밍";
+int index = str.indexOf("프로그래밍"); //3 저장됨
+//문자열 길이(length()) - 문자열의 길이(문자 수) 리턴
+String str = "자바 프로그래밍";
+int length = str.length(); //8 저장됨
+//문자열 대치(replace()) - 첫 번째 매개값인 문자열을 찾아 두 번째 매개값인 문자열로 대치한 새로운 문자열을 생성하고 리턴
+String str = "자바 프로그래밍";
+String newstr = str.replace("자바", "JAVA") //수정본이 아닌 새로운 문자열, newstr 변수인 "JAVA 프로그램"참조함
+//문자열 잘라내기(substring()) - 주어진 인덱스에서 문자열을 추출
+String ssn = "880815-1234567";
+String firstNum = ssn.substring(0,6); //880815 변수값
+String secondNum = ssn.substring(7); //1234567 변수값
+//알파벳 소.대문자 변경(toLowerCase(),toUpperCase()) - 문자열 모두 소문자 또는 대문자로 바꾼 새로운 문자열 생성 후 리턴
+String str = "Java Programming";
+String lowerstr = str.toLowerCase(); //"java programming" 참조
+String upperstr = str.toUpperCase(); //"JAVA PROGRAMMING" 참조
+//문자열 앞뒤 공백 잘라내기(trim()) - 문자열의 앞뒤 공백을 제거한 새로운 문자열 생성하고 리턴
+String str = "  자바 프로그래밍  ";
+String newstr = str.trim(); //"자바 프로그래밍" 참조
+//문자열 변환(valueOf()) - 기본 타입의 값을 문자열로 변환하는 기능
+String str1 = String.valueOf(10);
+String str2 = String.valueOf(10.5);
+String str3 = String.valueOf(true);
+System.out.println(str1); //10
+System.out.println(str2); //10.5
+System.out.println(str3); //true
+/*Wrapper(포장) 클래스 - 자바는 기본 타입의 값을 객체를 생성 가능, 이런 객체를 포장객체라 함(기본 타입의 값을 내부에 두고 포장하기 때문)
+    포장 객체의 특징은 포장하고 있는 기본 타입 값은 외부에서 변경할 수 없음, 내부 값을 변경하고 싶다면 새로운 포장 객체를 만들어야함
+    컬렉션 프레임워크에서 기본 타입 값을 객체로 생성해서 관리할 때 사용(포장 클래스 - Byte,Character,Short,Integer,Long...)*/
+//박싱과 언박싱 - 박싱(기본 타입의 값을 포장 객체로 만드는 과정), 언박싱(반대로 포장 객체에서 기본 타입의 값을 얻어내는 과정)
+//P500
+/*Math 클래스 - 수학 계산 사용 P504*/
